@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<head>
+  <title>JS CHR</title>
+  <style>
+
+body{
+  background-color: black;
+}
+
+    .plane{
+      margin:0;
+      padding:0;
+      display:inline-block;
+    }
+    .row{
+      margin:0;
+      padding:0;
+      line-height:0;
+    }
+
+    .pixel{ 
+      width: 4px;
+      height: 4px;
+      display: inline-block;
+      background-color: green;
+      padding:0;
+    }
+
+    .a {
+      background-color: transparent;
+    }
+    .b {
+      background-color: #FCE0A8;
+    }
+    .c {
+      background-color: #0078F8;
+    }
+    .d {
+      background-color: #A80020;
+    }
+
+  </style>
+
+<script src="data.js"></script>
+  <script>
+
+    function generate(){
+  let data = globalDataLoad;
+    const contentBlock = document.createElement("div");
+    for(var plane = 0; plane< data.length; plane++){
+      const planeDiv = document.createElement("div");
+      planeDiv.classList.add("plane");
+      for(var row = 0; row< 8; row++){
+        const rowDiv = document.createElement("div");
+        rowDiv.classList.add("row");
+        for(var pixel = 0; pixel< 8; pixel++){
+          const pixelDiv = document.createElement("div");
+          pixelDiv.classList.add("pixel");
+          switch(data[plane][row][pixel]){
+            case "0":
+            pixelDiv.classList.add("a")
+            break;
+            case "1":
+            pixelDiv.classList.add("b")
+            break;
+            case '2':
+            pixelDiv.classList.add("c")
+            break;
+            case '3':
+            pixelDiv.classList.add("d")
+            break;
+          }
+          rowDiv.appendChild(pixelDiv);
+        }
+        planeDiv.appendChild(rowDiv);
+      }
+      contentBlock.appendChild(planeDiv);
+    }
+      
+    document.getElementById("alan").appendChild(contentBlock);
+      
+  }
+    
+      
+    
+  </script>
+</head>
+<body onload="generate()">
+  <div id="alan">
+
+  </div>
+
+</body>
+</html>

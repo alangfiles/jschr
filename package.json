@@ -1,0 +1,16 @@
+{
+  "name": "js-chr",
+  "version": "1.0.0",
+  "description": "Display CHR ROM data in JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "load": "node -r esm index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "esm": "^3.2.25"
+  },
+  "devDependencies": {}
+}
