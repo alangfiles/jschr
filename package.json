@@ -2,15 +2,19 @@
   "name": "js-chr",
   "version": "1.0.0",
   "description": "Display CHR ROM data in JS",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "load": "node -r esm index.js"
+    "load": "node -r esm src/index.js",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "esm": "^3.2.25"
+    "esm": "^3.2.25",
+    "webpack": "^4.41.5"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "webpack-cli": "^3.3.10"
+  }
 }
