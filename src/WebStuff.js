@@ -63,6 +63,7 @@ WebStuff.generate = function(data) {
     contentBlock.appendChild(planeDiv);
   }
 
+  document.getElementById("chr-dump").innerHTML = "";
   document.getElementById("chr-dump").appendChild(contentBlock);
 };
 
