@@ -65,3 +65,38 @@ function dropHandler(e) {
 
 window.addEventListener("drop", dropHandler, false);
 window.addEventListener("dragover", e => e.preventDefault(), false);
+
+window.addEventListener("load", onLoad);
+
+function onLoad() {
+  document
+    .getElementById("newcolors-a")
+    .addEventListener(
+      "click",
+      () => WebStuff.changeColor("a", Math.floor(Math.random() * 56)),
+      false
+    );
+
+  document
+    .getElementById("newcolors-b")
+    .addEventListener(
+      "click",
+      () => WebStuff.changeColor("b", Math.floor(Math.random() * 56)),
+      false
+    );
+  document
+    .getElementById("newcolors-c")
+    .addEventListener(
+      "click",
+      () => WebStuff.changeColor("c", Math.floor(Math.random() * 56)),
+      false
+    );
+
+  document
+    .getElementById("newcolors-d")
+    .addEventListener(
+      "click",
+      () => WebStuff.changeColor("d", Math.floor(Math.random() * 56)),
+      false
+    );
+}

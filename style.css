@@ -21,17 +21,26 @@ body {
   padding: 0;
 }
 
+#color-section {
+  display: none;
+}
+
+.sample .pixel {
+  width: 100%;
+  height: 100%;
+}
+
 .a {
   background-color: transparent;
 }
 .b {
-  background-color: #a80020;
+  background-color: #f83800;
 }
 .c {
-  background-color: #fce0a8;
+  background-color: #fca044;
 }
 .d {
-  background-color: #0078f8;
+  background-color: #ac7c00;
 }
 
 .color-palette-block {
