@@ -1,7 +1,7 @@
 import { Utility } from "./Utility.js";
 import { WebStuff } from "./WebStuff.js";
 
-function generateCHR(arrayBuff) {
+function generateCHR(arrayBuff, showAllData) {
   const arrayBuffer = new Uint8Array(arrayBuff);
 
   console.log("array", arrayBuffer);
@@ -26,13 +26,19 @@ function generateCHR(arrayBuff) {
   //PRG ROM data in 16kB blocks and one byte for the length of CHR ROM in 8kB blocks
   console.log("header", header);
 
-  //const MemorySize = arrayBuffer.byteLength;
+  let MemorySize;
+  let offset;
 
-  const MemorySize = header.CHR_PAGES * 0x2000;
-
-  let offset = 16 + header.PRG_PAGES * 0x4000;
+  if (showAllData) {
+    MemorySize = arrayBuffer.byteLength;
+    offset = 0;
+  } else {
+    MemorySize = header.CHR_PAGES * 0x2000;
+    offset = 16 + header.PRG_PAGES * 0x4000;
+  }
 
   //const MemorySize = 8191;
+
   while (memoryAddress < MemorySize) {
     const firstPlane = [];
     const secondPlane = [];
@@ -72,12 +78,16 @@ function generateCHR(arrayBuff) {
 
 function dropHandler(e) {
   e.preventDefault();
+  document.getElementById("loading").style.display = "block";
+
+  let alldataflag = document.getElementById("all-data").checked;
 
   let reader = new FileReader();
-  reader.onload = function (e) {
+  reader.onload = async function (e) {
     var rawData = reader.result;
-    let data = generateCHR(rawData);
+    let data = await generateCHR(rawData, alldataflag);
     WebStuff.generate(data);
+    document.getElementById("loading").style.display = "none";
   };
 
   reader.readAsArrayBuffer(e.dataTransfer.files[0]);
@@ -89,34 +99,32 @@ window.addEventListener("dragover", (e) => e.preventDefault(), false);
 window.addEventListener("load", onLoad);
 
 function onLoad() {
-  document
-    .getElementById("newcolors-a")
-    .addEventListener(
-      "click",
-      () => WebStuff.changeColor("a", Math.floor(Math.random() * 56)),
-      false
-    );
-
-  document
-    .getElementById("newcolors-b")
-    .addEventListener(
-      "click",
-      () => WebStuff.changeColor("b", Math.floor(Math.random() * 56)),
-      false
-    );
-  document
-    .getElementById("newcolors-c")
-    .addEventListener(
-      "click",
-      () => WebStuff.changeColor("c", Math.floor(Math.random() * 56)),
-      false
-    );
-
-  document
-    .getElementById("newcolors-d")
-    .addEventListener(
-      "click",
-      () => WebStuff.changeColor("d", Math.floor(Math.random() * 56)),
-      false
-    );
+  // document
+  //   .getElementById("newcolors-a")
+  //   .addEventListener(
+  //     "click",
+  //     () => WebStuff.changeColor("a", Math.floor(Math.random() * 56)),
+  //     false
+  //   );
+  // document
+  //   .getElementById("newcolors-b")
+  //   .addEventListener(
+  //     "click",
+  //     () => WebStuff.changeColor("b", Math.floor(Math.random() * 56)),
+  //     false
+  //   );
+  // document
+  //   .getElementById("newcolors-c")
+  //   .addEventListener(
+  //     "click",
+  //     () => WebStuff.changeColor("c", Math.floor(Math.random() * 56)),
+  //     false
+  //   );
+  // document
+  //   .getElementById("newcolors-d")
+  //   .addEventListener(
+  //     "click",
+  //     () => WebStuff.changeColor("d", Math.floor(Math.random() * 56)),
+  //     false
+  //   );
 }
