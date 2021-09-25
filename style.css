@@ -14,8 +14,8 @@ body {
 }
 
 .pixel {
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
   display: inline-block;
   background-color: green;
   padding: 0;
