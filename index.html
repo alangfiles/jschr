@@ -6,10 +6,34 @@
   </head>
   <body style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;">
     <div id="loading" style="display:none; height:100vh; width: 100vw; position: fixed; top:0; left:0; background-color: cornflowerblue; opacity:0.9;">
-    <div style="text-align: center; padding-top:200px; color:white;"><h1>Loading...</h1></div>
+      <div style="text-align: center; padding-top:200px; color:white;"><h1>Loading...</h1></div>
     </div>
-    <input type="checkbox" id="all-data">
-    <span style="color: white; font-size:small;">Show all data (select before load)</span></input> 
+    <div id="options">
+      <input type="checkbox" id="all-data"><span style="color: white; font-size:small;">Show all data (select before load)</span></input>   
+
+      <div style="display:none;" id="palette-options">
+        <div id="palette-1" class="palette-section">
+          <div class="color-palette-block color_15"></div>
+          <div class="color-palette-block color_6"></div>
+          <div class="color-palette-block color_40"></div>
+          <div class="color-palette-block color_57"></div>
+        </div>
+        <div id="palette-2" class="palette-section">
+          <div class="color-palette-block color_15"></div>
+          <div class="color-palette-block color_29"></div>
+          <div class="color-palette-block color_44"></div>
+          <div class="color-palette-block color_57"></div>
+        </div>
+        <div id="palette-3" class="palette-section">
+          <div class="color-palette-block color_15"></div>
+          <div class="color-palette-block color_49"></div>
+          <div class="color-palette-block color_53"></div>
+          <div class="color-palette-block color_22"></div>
+        </div>
+        <input type="button" id="palette-random" value="Random"/>
+      </div>
+    </div>
+    
     <div><h1 style="color:white; text-align:center;">Drag and drop a NES rom onto this page.</h1></div>
     
     <div id="chr-dump"></div>

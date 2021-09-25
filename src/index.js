@@ -88,6 +88,7 @@ function dropHandler(e) {
     let data = await generateCHR(rawData, alldataflag);
     WebStuff.generate(data);
     document.getElementById("loading").style.display = "none";
+    document.getElementById("palette-options").style.display = "flex";
   };
 
   reader.readAsArrayBuffer(e.dataTransfer.files[0]);
@@ -99,32 +100,60 @@ window.addEventListener("dragover", (e) => e.preventDefault(), false);
 window.addEventListener("load", onLoad);
 
 function onLoad() {
-  // document
-  //   .getElementById("newcolors-a")
-  //   .addEventListener(
-  //     "click",
-  //     () => WebStuff.changeColor("a", Math.floor(Math.random() * 56)),
-  //     false
-  //   );
-  // document
-  //   .getElementById("newcolors-b")
-  //   .addEventListener(
-  //     "click",
-  //     () => WebStuff.changeColor("b", Math.floor(Math.random() * 56)),
-  //     false
-  //   );
-  // document
-  //   .getElementById("newcolors-c")
-  //   .addEventListener(
-  //     "click",
-  //     () => WebStuff.changeColor("c", Math.floor(Math.random() * 56)),
-  //     false
-  //   );
-  // document
-  //   .getElementById("newcolors-d")
-  //   .addEventListener(
-  //     "click",
-  //     () => WebStuff.changeColor("d", Math.floor(Math.random() * 56)),
-  //     false
-  //   );
+  document
+    .getElementById("palette-1")
+    .addEventListener(
+      "click",
+      () => setColors("#000000", "#a80020", "#fca044", "#f8d878"),
+      false
+    );
+
+  document
+    .getElementById("palette-2")
+    .addEventListener(
+      "click",
+      () => setColors("#000000", "#008888", "#58f898", "#f8d878"),
+      false
+    );
+
+  document
+    .getElementById("palette-3")
+    .addEventListener(
+      "click",
+      () => setColors("#000000", "#fcfcfc", "#f8b8f8", "#e40058"),
+      false
+    );
+
+  document
+    .getElementById("palette-random")
+    .addEventListener("click", randomColors, false);
+}
+
+function setColors(color1, color2, color3, color4) {
+  Array.from(document.getElementsByClassName("a")).forEach((e) => {
+    e.style.backgroundColor = color1;
+  });
+  Array.from(document.getElementsByClassName("b")).forEach((e) => {
+    e.style.backgroundColor = color2;
+  });
+  Array.from(document.getElementsByClassName("c")).forEach((e) => {
+    e.style.backgroundColor = color3;
+  });
+  Array.from(document.getElementsByClassName("d")).forEach((e) => {
+    e.style.backgroundColor = color4;
+  });
+}
+
+function randomColors() {
+  const colors =
+    "#7C7C7C,#0000FC,#0000BC,#4428BC,#940084,#A80020,#A81000,#881400,#503000,#007800,#006800,#005800,#004058,#BCBCBC,#0078F8,#0058F8,#6844FC,#D800CC,#E40058,#F83800,#E45C10,#AC7C00,#00B800,#00A800,#00A844,#008888,#F8F8F8,#3CBCFC,#6888FC,#9878F8,#F878F8,#F85898,#F87858,#FCA044,#F8B800,#B8F818,#58D854,#58F898,#00E8D8,#787878,#FCFCFC,#A4E4FC,#B8B8F8,#D8B8F8,#F8B8F8,#F8A4C0,#F0D0B0,#FCE0A8,#F8D878,#D8F878,#B8F8B8,#B8F8D8,#00FCFC,#F8D8F8,#000000".split(
+      ","
+    );
+
+  let shuffled = colors
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+
+  setColors("#000000", shuffled[0], shuffled[1], shuffled[2]);
 }

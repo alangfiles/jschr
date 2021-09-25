@@ -31,16 +31,24 @@ body {
 }
 
 .a {
-  background-color: transparent;
+  background-color: #000000;
 }
 .b {
-  background-color: #f83800;
+  background-color: #a80020;
 }
 .c {
   background-color: #fca044;
 }
 .d {
-  background-color: #ac7c00;
+  background-color: #f8d878;
+}
+
+.palette-section {
+  display: flex;
+  background-color: cornflowerblue;
+  border-radius: 4px;
+  padding: 4px;
+  margin-right: 4px;
 }
 
 .color-palette-block {
