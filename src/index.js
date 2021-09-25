@@ -29,7 +29,7 @@ function generateCHR(arrayBuff, showAllData) {
   let MemorySize;
   let offset;
 
-  if (showAllData) {
+  if (showAllData || header.CHR_PAGES == 0) {
     MemorySize = arrayBuffer.byteLength;
     offset = 0;
   } else {
