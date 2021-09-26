@@ -130,17 +130,18 @@ function onLoad() {
 }
 
 function setColors(color1, color2, color3, color4) {
-  Array.from(document.getElementsByClassName("a")).forEach((e) => {
-    e.style.backgroundColor = color1;
-  });
-  Array.from(document.getElementsByClassName("b")).forEach((e) => {
-    e.style.backgroundColor = color2;
-  });
-  Array.from(document.getElementsByClassName("c")).forEach((e) => {
-    e.style.backgroundColor = color3;
-  });
-  Array.from(document.getElementsByClassName("d")).forEach((e) => {
-    e.style.backgroundColor = color4;
+  alterExistingCSSRuleAttrib(".a", "background-color", color1);
+  alterExistingCSSRuleAttrib(".b", "background-color", color2);
+  alterExistingCSSRuleAttrib(".c", "background-color", color3);
+  alterExistingCSSRuleAttrib(".d", "background-color", color4);
+}
+
+function alterExistingCSSRuleAttrib(selectorText, attribName, newValue) {
+  // only one css sheet so we can shortcut to `styleSheets[0]`
+  Array.from(document.styleSheets[0].cssRules).forEach((e) => {
+    if (e.selectorText == selectorText) {
+      e.style[attribName] = newValue;
+    }
   });
 }
 
