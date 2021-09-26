@@ -11,11 +11,12 @@ body {
   margin: 0;
   padding: 0;
   line-height: 0;
+  display: flex;
 }
 
 .pixel {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
   display: inline-block;
   background-color: green;
   padding: 0;
