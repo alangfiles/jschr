@@ -1,6 +1,8 @@
 import { Utility } from "./Utility.js";
 import { WebStuff } from "./WebStuff.js";
 
+let SECTION_TO_UPDATE;
+
 function generateCHR(arrayBuff, showAllData) {
   const arrayBuffer = new Uint8Array(arrayBuff);
 
@@ -127,6 +129,41 @@ function onLoad() {
   document
     .getElementById("palette-random")
     .addEventListener("click", randomColors, false);
+
+  document
+    .getElementById("a-color")
+    .addEventListener("click", () => selectCustomColor(".a"), false);
+  document
+    .getElementById("b-color")
+    .addEventListener("click", () => selectCustomColor(".b"), false);
+  document
+    .getElementById("c-color")
+    .addEventListener("click", () => selectCustomColor(".c"), false);
+  document
+    .getElementById("d-color")
+    .addEventListener("click", () => selectCustomColor(".d"), false);
+
+  Array.from(document.getElementsByClassName("custom-selector")).forEach(
+    function (element) {
+      element.addEventListener("click", selectNewColor);
+    }
+  );
+
+  document.getElementById("hide-custom-palette-options").addEventListener(
+    "click",
+    () => {
+      document.getElementById("custom-palette-options").style.display = "none";
+    },
+    false
+  );
+
+  document.getElementById("palette-custom").addEventListener(
+    "click",
+    () => {
+      document.getElementById("custom-palette-options").style.display = "block";
+    },
+    false
+  );
 }
 
 function setColors(color1, color2, color3, color4) {
@@ -143,6 +180,22 @@ function alterExistingCSSRuleAttrib(selectorText, attribName, newValue) {
       e.style[attribName] = newValue;
     }
   });
+}
+
+function customColor() {
+  document.getElementById("custom-palette-options").style.display = "block";
+}
+
+function selectCustomColor(section) {
+  //update border color
+  SECTION_TO_UPDATE = section;
+}
+
+function selectNewColor(e) {
+  if (SECTION_TO_UPDATE) {
+    let newColor = window.getComputedStyle(e.target).backgroundColor;
+    alterExistingCSSRuleAttrib(SECTION_TO_UPDATE, "background-color", newColor);
+  }
 }
 
 function randomColors() {

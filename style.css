@@ -44,12 +44,29 @@ body {
   background-color: #f8d878;
 }
 
+.border1 {
+  border-color: cornflowerblue;
+  border-width: 1px;
+  border-style: solid;
+}
+
 .palette-section {
   display: flex;
   background-color: cornflowerblue;
   border-radius: 4px;
   padding: 4px;
   margin-right: 4px;
+}
+
+#custom-palette-options {
+  display: none;
+  width: 300px;
+  border: 1px solid white;
+  padding: 2px;
+}
+
+.custom-palette-section {
+  display: flex;
 }
 
 .color-palette-block {
