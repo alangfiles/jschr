@@ -19,10 +19,13 @@ WebStuff.generateColorPalette = function () {
 };
 
 WebStuff.generate = function (data) {
+  let hexValue = 0;
+
   const contentBlock = document.createElement("div");
   for (var plane = 0; plane < data.length; plane++) {
     const planeDiv = document.createElement("div");
     planeDiv.classList.add("plane");
+    planeDiv.setAttribute("title", "0x" + hexValue.toString(16));
     for (var row = 0; row < 8; row++) {
       const rowDiv = document.createElement("div");
       rowDiv.classList.add("row");
@@ -48,11 +51,14 @@ WebStuff.generate = function (data) {
       planeDiv.appendChild(rowDiv);
     }
     contentBlock.appendChild(planeDiv);
+    hexValue++;
+    if (hexValue > 255) {
+      hexValue = 0;
+    }
   }
 
   document.getElementById("chr-dump").innerHTML = "";
   document.getElementById("chr-dump").appendChild(contentBlock);
-  //document.getElementById("color-section").style.display = "block";
 };
 
 export { WebStuff };
