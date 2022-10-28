@@ -18,35 +18,72 @@ WebStuff.generateColorPalette = function () {
   // }
 };
 
+WebStuff.globalData = null;
+
+WebStuff.drawChrZoom = function (startingSprite) {
+  if (!WebStuff.globalData) {
+    console.error("No CHR loaded yet");
+    return;
+  }
+  WebStuff.TwoBPPWriter(
+    WebStuff.globalData,
+    "chr-dump-zoom",
+    false,
+    startingSprite,
+    4,
+    5
+  ); //, startingSprite, 4, 4);
+};
+
 WebStuff.generate = function (data) {
-  let planesInRow = 0;
-  let hexValue = 0;
+  WebStuff.TwoBPPWriter(data, "chr-dump", true);
+};
+
+WebStuff.TwoBPPWriter = function (
+  data,
+  divName,
+  linkZoomAction = false,
+  startingSprite = 0,
+  maxSpritesInRow = 16,
+  maxRows = null
+) {
+  console.log({ startingSprite });
+  let spritesInRow = 0;
   let hexString;
+  let numberOfSpritesDrawn = 0;
+  let MAX_SPRITES = maxRows ? maxRows * maxSpritesInRow : data.length;
   let allContent = document.createElement("div");
   allContent.classList.add("allContent");
 
   let contentBlock = document.createElement("div");
 
-  for (var plane = 0; plane < data.length; plane++) {
-    if (planesInRow == 16) {
+  for (
+    var sprite = startingSprite;
+    numberOfSpritesDrawn < MAX_SPRITES;
+    numberOfSpritesDrawn++
+  ) {
+    if (spritesInRow == maxSpritesInRow) {
       allContent.appendChild(contentBlock);
       contentBlock = document.createElement("div");
-      planesInRow = 0;
+      spritesInRow = 0;
+
+      sprite += 16 - maxSpritesInRow;
     }
-    hexString = hexValue.toString(16);
+
+    hexString = sprite.toString(16);
     if (hexString.length < 2) {
       hexString = "0" + hexString;
     }
-    const planeDiv = document.createElement("div");
-    planeDiv.classList.add("plane");
-    planeDiv.setAttribute("title", "0x" + hexString);
+    const spriteDiv = document.createElement("div");
+    spriteDiv.classList.add("sprite");
+    spriteDiv.setAttribute("title", "0x" + hexString);
     for (var row = 0; row < 8; row++) {
       const rowDiv = document.createElement("div");
       rowDiv.classList.add("row");
       for (var pixel = 0; pixel < 8; pixel++) {
         const pixelDiv = document.createElement("div");
         pixelDiv.classList.add("pixel");
-        switch (data[plane][row][pixel]) {
+        switch (data[sprite][row][pixel]) {
           case "0":
             pixelDiv.classList.add("a");
             break;
@@ -62,18 +99,24 @@ WebStuff.generate = function (data) {
         }
         rowDiv.appendChild(pixelDiv);
       }
-      planeDiv.appendChild(rowDiv);
+      spriteDiv.appendChild(rowDiv);
     }
-    contentBlock.appendChild(planeDiv);
-    hexValue++;
-    if (hexValue > 255) {
-      hexValue = 0;
+
+    if (linkZoomAction) {
+      (function (index) {
+        spriteDiv.addEventListener("click", () => {
+          WebStuff.drawChrZoom(index);
+        });
+      })(sprite);
     }
-    planesInRow++;
+
+    contentBlock.appendChild(spriteDiv);
+    spritesInRow++;
+    sprite++;
   }
 
-  document.getElementById("chr-dump").innerHTML = "";
-  document.getElementById("chr-dump").appendChild(allContent);
+  document.getElementById(divName).innerHTML = "";
+  document.getElementById(divName).appendChild(allContent);
 };
 
 export { WebStuff };

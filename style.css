@@ -1,7 +1,7 @@
 body {
   background-color: black;
 }
-.plane {
+.sprite {
   margin: 0;
   padding: 0;
   display: inline-block;
@@ -35,6 +35,26 @@ body {
 .sample .pixel {
   width: 100%;
   height: 100%;
+}
+
+#chr-display{
+  display:flex;
+
+}
+
+#chr-dump{
+}
+
+#chr-dump-zoom{
+  height:400px;
+  width:400px;
+  
+}
+#chr-dump-zoom .pixel {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  padding: 0;
 }
 
 .a {
