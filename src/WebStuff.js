@@ -18,53 +18,67 @@ WebStuff.generateColorPalette = function () {
   // }
 };
 
-WebStuff.globalData = null;
+WebStuff.vars = {};
 
-WebStuff.drawChrZoom = function (startingSprite) {
+WebStuff.globalData = null;
+WebStuff.pickedColor = 0;
+WebStuff.selectedSprite = 0;
+
+WebStuff.changeColor = function (sprite, row, pixel) {
+  console.log({ sprite });
+  console.log({ row });
+  console.log({ pixel });
+
+  this.globalData[sprite][row][pixel] = this.pickedColor;
+  WebStuff.generate();
+};
+
+WebStuff.drawChrZoom = function () {
   if (!WebStuff.globalData) {
     console.error("No CHR loaded yet");
     return;
   }
   WebStuff.TwoBPPWriter(
-    WebStuff.globalData,
     "chr-dump-zoom",
     false,
-    startingSprite,
+    true,
+    WebStuff.selectedSprite,
     4,
-    5
-  ); //, startingSprite, 4, 4);
+    4
+  );
 };
 
-WebStuff.generate = function (data) {
-  WebStuff.TwoBPPWriter(data, "chr-dump", true);
+WebStuff.generate = function () {
+  WebStuff.TwoBPPWriter("chr-dump", true, false);
 };
 
 WebStuff.TwoBPPWriter = function (
-  data,
   divName,
   linkZoomAction = false,
+  colorPixelAction = false,
   startingSprite = 0,
   maxSpritesInRow = 16,
   maxRows = null
 ) {
-  console.log({ startingSprite });
   let spritesInRow = 0;
   let hexString;
   let numberOfSpritesDrawn = 0;
-  let MAX_SPRITES = maxRows ? maxRows * maxSpritesInRow : data.length;
+  let MAX_SPRITES = maxRows
+    ? maxRows * maxSpritesInRow
+    : WebStuff.globalData.length;
   let allContent = document.createElement("div");
   allContent.classList.add("allContent");
 
-  let contentBlock = document.createElement("div");
+  let rowOfSprites = document.createElement("div");
 
   for (
-    var sprite = startingSprite;
+    let sprite = startingSprite;
     numberOfSpritesDrawn < MAX_SPRITES;
     numberOfSpritesDrawn++
   ) {
     if (spritesInRow == maxSpritesInRow) {
-      allContent.appendChild(contentBlock);
-      contentBlock = document.createElement("div");
+      allContent.appendChild(rowOfSprites);
+      rowOfSprites = document.createElement("div");
       spritesInRow = 0;
 
       sprite += 16 - maxSpritesInRow;
@@ -77,13 +91,13 @@ WebStuff.TwoBPPWriter = function (
     const spriteDiv = document.createElement("div");
     spriteDiv.classList.add("sprite");
     spriteDiv.setAttribute("title", "0x" + hexString);
-    for (var row = 0; row < 8; row++) {
+    for (let row = 0; row < 8; row++) {
       const rowDiv = document.createElement("div");
       rowDiv.classList.add("row");
-      for (var pixel = 0; pixel < 8; pixel++) {
+      for (let pixel = 0; pixel < 8; pixel++) {
         const pixelDiv = document.createElement("div");
         pixelDiv.classList.add("pixel");
-        switch (data[sprite][row][pixel]) {
+        switch (WebStuff.globalData[sprite][row][pixel]) {
           case "0":
             pixelDiv.classList.add("a");
             break;
@@ -97,23 +111,30 @@ WebStuff.TwoBPPWriter = function (
             pixelDiv.classList.add("d");
             break;
         }
+        if (colorPixelAction) {
+          pixelDiv.addEventListener("click", () => {
+            WebStuff.changeColor(sprite, row, pixel);
+          });
+        }
+
         rowDiv.appendChild(pixelDiv);
       }
       spriteDiv.appendChild(rowDiv);
     }
 
     if (linkZoomAction) {
-      (function (index) {
-        spriteDiv.addEventListener("click", () => {
-          WebStuff.drawChrZoom(index);
-        });
-      })(sprite);
+      spriteDiv.addEventListener("click", () => {
+        WebStuff.selectedSprite = sprite - 1;
+        WebStuff.drawChrZoom();
+      });
     }
 
-    contentBlock.appendChild(spriteDiv);
+    rowOfSprites.appendChild(spriteDiv);
     spritesInRow++;
     sprite++;
   }
+
+  allContent.appendChild(rowOfSprites);
 
   document.getElementById(divName).innerHTML = "";
   document.getElementById(divName).appendChild(allContent);
