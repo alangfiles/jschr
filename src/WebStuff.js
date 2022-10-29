@@ -28,10 +28,37 @@ const WebStuff = {
     let data = this.globalData[sprite][row]; //like "00112233"
     data = data.substr(0, pixel) + this.pickedColor + data.substr(pixel + 1);
 
+    //this updates the underlying global data.
     this.globalData[sprite][row] = data;
 
-    this.drawChrZoom();
-    this.generate();
+    //instead of doing big work to redraw everything,
+    //we're just gonna update the css for this cell
+    //(which might be in the left and right displays)
+    let elems = document.getElementsByClassName(`id-${sprite}-${row}-${pixel}`);
+    for (let i = 0; i < elems.length; i++) {
+      elems[i].classList.remove("a");
+      elems[i].classList.remove("b");
+      elems[i].classList.remove("c");
+      elems[i].classList.remove("d");
+
+      switch (this.pickedColor) {
+        case 0:
+          elems[i].classList.add("a");
+          break;
+        case 1:
+          elems[i].classList.add("b");
+          break;
+        case 2:
+          elems[i].classList.add("c");
+          break;
+        case 3:
+          elems[i].classList.add("d");
+          break;
+      }
+    }
+
+    // this.drawChrZoom();
+    // this.generate();
   },
   drawChrZoom: function () {
     if (!this.globalData) {
@@ -88,6 +115,7 @@ const WebStuff = {
         for (let pixel = 0; pixel < 8; pixel++) {
           const pixelDiv = document.createElement("div");
           pixelDiv.classList.add("pixel");
+          pixelDiv.classList.add(`id-${sprite}-${row}-${pixel}`);
           switch (this.globalData[sprite][row][pixel]) {
             case "0":
               pixelDiv.classList.add("a");
@@ -107,6 +135,9 @@ const WebStuff = {
               if (this.mouseDown) {
                 this.changeColor(sprite - 1, row, pixel);
               }
+            });
+            pixelDiv.addEventListener("click", (e) => {
+              this.changeColor(sprite - 1, row, pixel);
             });
           }
 
