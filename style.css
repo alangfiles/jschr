@@ -43,12 +43,15 @@ body {
 }
 
 #chr-dump{
+  width:600px;
+  min-height: 800px;
+  border: 2px solid gold;
 }
 
 #chr-dump-zoom{
   height:400px;
   width:400px;
-  
+  border: 2px solid green;
 }
 #chr-dump-zoom .pixel {
   width: 8px;
@@ -62,6 +65,11 @@ body {
   flex-wrap: wrap;
   height:200px;
   width:200px;
+}
+
+#zoom-section{
+  display:flex;
+  flex-direction: column;
 }
 
 .big-color-picker{
