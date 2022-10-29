@@ -57,6 +57,23 @@ body {
   padding: 0;
 }
 
+#color-picker{
+  display:flex;
+  flex-wrap: wrap;
+  height:200px;
+  width:200px;
+}
+
+.big-color-picker{
+  height:92px;
+  width:92px;
+  margin: 2px;
+  border: 2px solid grey;
+}
+.selected {
+  border: 2px solid yellow;
+}
+
 .a {
   background-color: #000000;
 }

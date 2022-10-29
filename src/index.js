@@ -30,6 +30,12 @@ window.addEventListener("drop", dropHandler, false);
 window.addEventListener("dragover", (e) => e.preventDefault(), false);
 window.addEventListener("load", onLoad);
 
+function removeSelectedColorPickerCss() {
+  let colorPickers = document.getElementsByClassName("big-color-picker");
+  for (let i = 0; i < colorPickers.length; i++) {
+    colorPickers[i].classList.remove("selected");
+  }
+}
 function onLoad() {
   document
     .getElementById("palette-1")
@@ -38,6 +44,34 @@ function onLoad() {
       () => setColors("#000000", "#a80020", "#fca044", "#f8d878"),
       false
     );
+
+  document.getElementById("color-picker-0").addEventListener("click", () => {
+    removeSelectedColorPickerCss();
+    document.getElementById("color-picker-0").classList.add("selected");
+    WebStuff.pickedColor = 0;
+  });
+  document.getElementById("color-picker-1").addEventListener("click", () => {
+    removeSelectedColorPickerCss();
+    document.getElementById("color-picker-1").classList.add("selected");
+    WebStuff.pickedColor = 1;
+  });
+  document.getElementById("color-picker-2").addEventListener("click", () => {
+    removeSelectedColorPickerCss();
+    document.getElementById("color-picker-2").classList.add("selected");
+    WebStuff.pickedColor = 2;
+  });
+  document.getElementById("color-picker-3").addEventListener("click", () => {
+    removeSelectedColorPickerCss();
+    document.getElementById("color-picker-3").classList.add("selected");
+    WebStuff.pickedColor = 3;
+  });
+
+  document.addEventListener("mousedown", () => {
+    WebStuff.mouseDown = true;
+  });
+  document.addEventListener("mouseup", () => {
+    WebStuff.mouseDown = false;
+  });
 
   document
     .getElementById("palette-2")
