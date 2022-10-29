@@ -21,53 +21,42 @@ Utility.convertDecToHexString = function (num, width, noPrefix) {
   return prefix + (base + str).substr(-1 * width);
 };
 
-Utility.splitPlanes = function (data) {
-  // this will take in a sprite (8 rows) and return
-  // 16 bytes from it.
+// Utility.splitPlanes = function (currentRow) {
+//   // this will take in a sprite (8 rows) and return
+//   // 16 bytes from it.
 
-  let result = [];
-  for (let i = 0; i < 8; i++) {
-    if (!data[i]) {
-      continue;
-    }
-    //8 rows
-    for (let j = 0; j < 8; j++) {
-      if (!data[i][j]) {
-        continue;
-      }
-      let singleResult = Utility.splitSingleRow(data[i][j]);
-      result.push(singleResult);
-    }
-  }
-  return result.flat();
-};
+//   let result = [];
+//   for (let i = 0; i < 8; i++) {
+//     let singleResult = Utility.splitSingleRow(currentRow[i]);
+//     result.push(singleResult);
+//   }
+//   return result.flat();
+// };
 
 Utility.splitSingleRow = function (data) {
   if (!data) {
     return [parseInt("00000000", 2), parseInt("00000000", 2)];
   }
-  // this takes a single rom like "00112233"
+  // this takes a single row like "00112233"
   // and returns 2 bytes from it.
   let byteOne = "";
   let byteTwo = "";
   for (let i = 0; i < data.length; i++) {
-    switch (data[i]) {
-      case "0":
-        byteOne += "0";
-        byteTwo += "0";
-        break;
-      case "1":
-        byteOne += "1";
-        byteTwo += "0";
-        break;
-      case "2":
-        byteOne += "0";
-        byteTwo += "1";
-        break;
-      case "3":
-        byteOne += "1";
-        byteTwo += "1";
-        break;
+    if (data[i] == "0") {
+      byteOne += "0";
+      byteTwo += "0";
+    }
+    if (data[i] == "1") {
+      byteOne += "1";
+      byteTwo += "0";
+    }
+    if (data[i] == "2") {
+      byteOne += "0";
+      byteTwo += "1";
+    }
+    if (data[i] == "3") {
+      byteOne += "1";
+      byteTwo += "1";
     }
   }
 
@@ -129,7 +118,7 @@ Utility.writeCHR = function (spriteList) {
 
     for (let rowIndex = 0; rowIndex < currentSprite.length; rowIndex++) {
       let currentRow = currentSprite[rowIndex];
-      let result = Utility.splitPlanes(currentRow);
+      let result = Utility.splitSingleRow(currentRow);
       firstEightBytes.push(result[0]);
       secondEightBytes.push(result[1]);
     }
