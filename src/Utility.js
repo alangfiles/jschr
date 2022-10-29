@@ -21,8 +21,64 @@ Utility.convertDecToHexString = function (num, width, noPrefix) {
   return prefix + (base + str).substr(-1 * width);
 };
 
-Utility.combinePlanes = function (first, second) {
+Utility.splitPlanes = function (data) {
+  // this will take in a sprite (8 rows) and return
+  // 16 bytes from it.
+
   let result = [];
+  for (let i = 0; i < 8; i++) {
+    if (!data[i]) {
+      continue;
+    }
+    //8 rows
+    for (let j = 0; j < 8; j++) {
+      if (!data[i][j]) {
+        continue;
+      }
+      let singleResult = Utility.splitSingleRow(data[i][j]);
+      result.push(singleResult);
+    }
+  }
+  return result.flat();
+};
+
+Utility.splitSingleRow = function (data) {
+  if (!data) {
+    return [parseInt("00000000", 2), parseInt("00000000", 2)];
+  }
+  // this takes a single rom like "00112233"
+  // and returns 2 bytes from it.
+  let byteOne = "";
+  let byteTwo = "";
+  for (let i = 0; i < data.length; i++) {
+    switch (data[i]) {
+      case "0":
+        byteOne += "0";
+        byteTwo += "0";
+        break;
+      case "1":
+        byteOne += "1";
+        byteTwo += "0";
+        break;
+      case "2":
+        byteOne += "0";
+        byteTwo += "1";
+        break;
+      case "3":
+        byteOne += "1";
+        byteTwo += "1";
+        break;
+    }
+  }
+
+  return [parseInt(byteOne, 2), parseInt(byteTwo, 2)];
+};
+
+Utility.combinePlanes = function (first, second) {
+  //takes in 2 sets of 8 bytes and compares bits in them.
+  let result = [];
+  // console.log("start");
+  // console.log({ first, second });
 
   for (let byte = 0; byte < 8; byte++) {
     let string = "";
@@ -42,11 +98,59 @@ Utility.combinePlanes = function (first, second) {
   return result;
 };
 
+Utility.writeCHR = function (spriteList) {
+  console.log("writeCHR:", spriteList);
+  const arrayBuffer = new Uint8Array(spriteList.length * 16);
+  let memoryAddress = 0;
+
+  // takes in the data (sprite[spriteNo] = array of 8 bytes)
+
+  for (let spriteIndex = 0; spriteIndex < spriteList.length; spriteIndex++) {
+    //for each sprite in the sprite List
+    let currentSprite = spriteList[spriteIndex];
+    //the sprite looks like this, 8 rows.
+    /*
+    00001100
+    00001200
+    00001300
+    00011100
+    00011110
+    00111110
+    00011110
+    22311113
+    */
+    //we want to transform that into 16 bytes, two for each row,
+    //but the tricky part is that the first 8 bytes are the first
+    // split result of each of those. and the second 8 bytes are the
+    // next split result
+
+    let firstEightBytes = [];
+    let secondEightBytes = [];
+
+    for (let rowIndex = 0; rowIndex < currentSprite.length; rowIndex++) {
+      let currentRow = currentSprite[rowIndex];
+      let result = Utility.splitPlanes(currentRow);
+      firstEightBytes.push(result[0]);
+      secondEightBytes.push(result[1]);
+    }
+
+    for (let i = 0; i < firstEightBytes.length; i++) {
+      arrayBuffer[memoryAddress] = firstEightBytes[i];
+      memoryAddress++;
+    }
+    for (let i = 0; i < secondEightBytes.length; i++) {
+      arrayBuffer[memoryAddress] = secondEightBytes[i];
+      memoryAddress++;
+    }
+  }
+
+  return arrayBuffer;
+};
+
 Utility.generateCHR = function (arrayBuff, showAllData) {
   //old function, not used anymore.
+  console.log("Entry", { arrayBuff });
   const arrayBuffer = new Uint8Array(arrayBuff);
-
-  console.log("array", arrayBuffer);
 
   let chr = [];
 
@@ -86,6 +190,13 @@ Utility.generateCHR = function (arrayBuff, showAllData) {
     const secondPlane = [];
 
     //fill up both planes, then put that in the CHR
+    //each plane is 8 bytes.
+    //so the memory looks like:
+    //8 bytes for half the sprite
+    //8 bytes for the other half of the sprite
+
+    // the data is a bunch of sprites, but it takes 16 bytes
+    // to define each sprite.
     while (firstPlane.length < 8) {
       const data = arrayBuffer[memoryAddress + offset];
 

@@ -74,9 +74,13 @@ function onLoad() {
   });
 
   document.getElementById("save-chr").addEventListener("click", async () => {
+    let data = Utility.writeCHR(WebStuff.globalData);
     const fileHandle = await window.showSaveFilePicker();
     const fileStream = await fileHandle.createWritable();
-    await fileStream.write(new Blob(["CONTENT"], { type: "text/plain" }));
+    console.log("savechr:", typeof data, { data });
+    await fileStream.write(
+      new Blob([new Uint8Array(data)], { type: "text/plain" })
+    );
     await fileStream.close();
   });
 
