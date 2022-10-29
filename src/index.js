@@ -73,6 +73,13 @@ function onLoad() {
     WebStuff.mouseDown = false;
   });
 
+  document.getElementById("save-chr").addEventListener("click", async () => {
+    const fileHandle = await window.showSaveFilePicker();
+    const fileStream = await fileHandle.createWritable();
+    await fileStream.write(new Blob(["CONTENT"], { type: "text/plain" }));
+    await fileStream.close();
+  });
+
   document
     .getElementById("palette-2")
     .addEventListener(
