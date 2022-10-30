@@ -10,12 +10,12 @@ function dropHandler(e) {
   e.preventDefault();
   document.getElementById("loading").style.display = "block";
 
-  let alldataflag = document.getElementById("all-data").checked;
+  let usingNESROM = document.getElementById("using-nes-rom").checked;
 
   let reader = new FileReader();
   reader.onload = async function (e) {
     var rawData = reader.result;
-    let data = await Utility.generateCHR(rawData, alldataflag);
+    let data = await Utility.generateCHR(rawData, usingNESROM);
     WebStuff.globalData = data;
     globalData = data;
     WebStuff.generate(data);
@@ -77,7 +77,6 @@ function onLoad() {
     let data = Utility.writeCHR(WebStuff.globalData);
     const fileHandle = await window.showSaveFilePicker();
     const fileStream = await fileHandle.createWritable();
-    console.log("savechr:", typeof data, { data });
     await fileStream.write(
       new Blob([new Uint8Array(data)], { type: "text/plain" })
     );
